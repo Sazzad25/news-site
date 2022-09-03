@@ -1,5 +1,5 @@
 const loadPhones = async (searchText, dataLimit) => {
-    const url = `https://openapi.programming-hero.com/api/phones?search=${searchText}`;
+    const url = ` https://openapi.programming-hero.com/api/news/category/01`;
     const res = await fetch(url);
     const data = await res.json();
     displayPhones(data.data, dataLimit);
@@ -18,7 +18,7 @@ const displayPhones = (phones, dataLimit) => {
         showAll.classList.add('d-none');
     }
 
-    //display no phones found
+    // display no phones found
     const noPhone = document.getElementById('no-found-messege');
     if (phones.length === 0) {
         noPhone.classList.remove('d-none');
@@ -31,12 +31,16 @@ const displayPhones = (phones, dataLimit) => {
         phoneDiv.classList.add('col');
         phoneDiv.innerHTML = `
         <div class="card p-4">
-                            <img src="${phone.image}" class="card-img-top" alt="...">
+                            <img src="${phone.thumbnail_url}" class="card-img-top" alt="...">
                             <div class="card-body">
-                                <h5 class="card-title">${phone.phone_name}</h5>
+                                <h5 class="card-title">${phone.title ? phone.title : "No title available"}</h5>
                                 <p class="card-text">This is a longer card with supporting text below as a natural
                                     lead-in to additional content. This content is a little bit longer.</p>
-                                    <button onclick="loadPhoneDetails('${phone.slug}')" href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"">Show Details</button>
+                                    <p class="card-text">Author Name: ${phone.author.name ? phone.author.name : 'N/A'}<p>
+                                    <p class="card-text">Published Date: ${phone.author.published_date ? phone.author.published_date : 'No date available'}<p>
+                                    
+                                    <p class="card-text">Total View: ${phone.total_view ? phone.total_view : 'No data available'}<p>
+                                    <button onclick="loadPhoneDetails()" href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"">Show Details</button>
                                     
                             </div>
                         </div>
@@ -47,19 +51,19 @@ const displayPhones = (phones, dataLimit) => {
     toggleSpinner(false);
 }
 
-const processSearch = (dataLimit) => {
+const processSearch = () => {
     toggleSpinner(true);
     const searchField = document.getElementById('breaking-news');
     const searchText = searchField.innerText;
-    loadPhones(searchText, dataLimit);
+    loadPhones(searchText);
 }
 
-document.getElementById('regular-news').addEventListener('click', function () {
+document.getElementById('breaking-news').addEventListener('click', function () {
     processSearch(10);
 })
 
 // search input field enter key handler
-document.getElementById('regular-news').addEventListener('keypress', function (e) {
+document.getElementById('breaking-news').addEventListener('keypress', function (e) {
     if (e.key === 'Enter') {
         processSearch(10);
     }
@@ -76,12 +80,12 @@ const toggleSpinner = isLoading => {
 }
 
 // not the best way
-document.getElementById('btn-show-all').addEventListener('click', function () {
+document.getElementById('breaking-news').addEventListener('click', function () {
     processSearch();
 })
 
-const loadPhoneDetails = async id => {
-    const url = ` https://openapi.programming-hero.com/api/phone/${id}`;
+const loadPhoneDetails = async news_id => {
+    const url = ` https://openapi.programming-hero.com/api/news/${news_id}`;
     const res = await fetch(url);
     const data = await res.json();
     displayPhoneDetails(data.data);
@@ -92,10 +96,9 @@ const displayPhoneDetails = phone => {
     modalTitle.innerText = phone.name;
     const phoneDetails = document.getElementById('phone-details');
     phoneDetails.innerHTML = `
-    <p>Release Date: ${phone.releaseDate ? phone.releaseDate : 'No Realease Date Found'}</p>
-    <p>Storage : ${phone.mainFeatures.storage}</p>
-    <p>Others: ${phone.others ? phone.others.Bluetooth : 'No Bluetooth Information'}
+    <p>Author: ${phone.author.name ? phone.author.name : 'N/A'}</p>
+    <p>Total View: ${phone.total_view ? phone.total_view : 'No data available'}
     `
 }
 
-// loadPhones('apple');
+loadPhones();
