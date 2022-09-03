@@ -1,5 +1,5 @@
-const loadPhones = async (searchText, dataLimit) => {
-    const url = ` https://openapi.programming-hero.com/api/news/category/01`;
+const loadPhones = async (dataLimit, category_id) => {
+    const url = `  https://openapi.programming-hero.com/api/news/category/01`;
     const res = await fetch(url);
     const data = await res.json();
     displayPhones(data.data, dataLimit);
@@ -8,17 +8,7 @@ const loadPhones = async (searchText, dataLimit) => {
 const displayPhones = (phones, dataLimit) => {
     const phonesContainer = document.getElementById('phones-container');
     phonesContainer.textContent = '';
-    // display 10 phones only
-    const showAll = document.getElementById('show-all');
-    if (dataLimit && phones.length > 10) {
-        phones = phones.slice(0, 10);
-        showAll.classList.remove('d-none');
-    }
-    else {
-        showAll.classList.add('d-none');
-    }
 
-    // display no phones found
     const noPhone = document.getElementById('no-found-messege');
     if (phones.length === 0) {
         noPhone.classList.remove('d-none');
@@ -40,7 +30,7 @@ const displayPhones = (phones, dataLimit) => {
                                     <p class="card-text">Published Date: ${phone.author.published_date ? phone.author.published_date : 'No date available'}<p>
                                     
                                     <p class="card-text">Total View: ${phone.total_view ? phone.total_view : 'No data available'}<p>
-                                    <button onclick="loadPhoneDetails()" href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"">Show Details</button>
+                                    <button onclick="loadPhoneDetails('${phone.category_id}')" href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"">Show Details</button>
                                     
                             </div>
                         </div>
@@ -54,15 +44,11 @@ const displayPhones = (phones, dataLimit) => {
 const processSearch = () => {
     toggleSpinner(true);
     const searchField = document.getElementById('breaking-news');
-    const searchText = searchField.innerText;
-    loadPhones(searchText);
+    const category_id = searchField.innerText;
+    loadPhones(category_id);
 }
 
-document.getElementById('breaking-news').addEventListener('click', function () {
-    processSearch(10);
-})
 
-// search input field enter key handler
 document.getElementById('breaking-news').addEventListener('keypress', function (e) {
     if (e.key === 'Enter') {
         processSearch(10);
@@ -101,4 +87,4 @@ const displayPhoneDetails = phone => {
     `
 }
 
-loadPhones();
+// loadPhones();
