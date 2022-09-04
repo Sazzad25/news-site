@@ -1,5 +1,5 @@
-const loadPhones = async (category_id) => {
-    const url = `  https://openapi.programming-hero.com/api/news/category/01`;
+const loadPhones = async () => {
+    const url = `   https://openapi.programming-hero.com/api/news/category/01`;
     const res = await fetch(url);
     const data = await res.json();
     displayPhones(data.data);
@@ -30,7 +30,7 @@ const displayPhones = (phones) => {
                                     <p class="card-text">Published Date: ${phone.author.published_date ? phone.author.published_date : 'No date available'}<p>
                                     
                                     <p class="card-text">Total View: ${phone.total_view ? phone.total_view : 'No data available'}<p>
-                                    <button onclick="loadPhoneDetails('${phone.category_id}')" href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"">Show Details</button>
+                                    <button id="author-info" onclick="loadPhoneDetails('${phone.category_id}')" href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"">Author Details</button>
                                     
                             </div>
                         </div>
@@ -43,13 +43,13 @@ const displayPhones = (phones) => {
 
 const processSearch = () => {
     toggleSpinner(true);
-    const searchField = document.getElementById('breaking-news');
+    const searchField = document.getElementById('all-category');
     const category_id = searchField.innerText;
     loadPhones(category_id);
 }
 
 
-document.getElementById('breaking-news').addEventListener('keypress', function (e) {
+document.getElementById('all-category').addEventListener('keypress', function (e) {
     if (e.key === 'Enter') {
         processSearch(10);
     }
@@ -65,8 +65,7 @@ const toggleSpinner = isLoading => {
     }
 }
 
-// not the best way
-document.getElementById('breaking-news').addEventListener('click', function () {
+document.getElementById('all-category').addEventListener('click', function () {
     processSearch();
 })
 
@@ -78,7 +77,7 @@ const loadPhoneDetails = async news_id => {
 }
 
 const displayPhoneDetails = phone => {
-    const modalTitle = document.getElementById('exampleModalLabel');
+    const modalTitle = document.getElementById('author-info');
     modalTitle.innerText = phone.name;
     const phoneDetails = document.getElementById('phone-details');
     phoneDetails.innerHTML = `
@@ -86,5 +85,3 @@ const displayPhoneDetails = phone => {
     <p>Total View: ${phone.total_view ? phone.total_view : 'No data available'}
     `
 }
-
-// loadPhones();
