@@ -1,11 +1,11 @@
-const loadPhones = async (category_id) => {
-    const url = `  https://openapi.programming-hero.com/api/news/category/01`;
+const loadPhones2 = async (category_id) => {
+    const url = ` https://openapi.programming-hero.com/api/news/category/${category_id}`;
     const res = await fetch(url);
     const data = await res.json();
-    displayPhones(data.data);
+    displayPhones2(data.data);
 }
 
-const displayPhones = (phones) => {
+const displayPhones2 = (phones) => {
     const phonesContainer = document.getElementById('phones-container');
     phonesContainer.textContent = '';
 
@@ -30,7 +30,7 @@ const displayPhones = (phones) => {
                                     <p class="card-text">Published Date: ${phone.author.published_date ? phone.author.published_date : 'No date available'}<p>
                                     
                                     <p class="card-text">Total View: ${phone.total_view ? phone.total_view : 'No data available'}<p>
-                                    <button onclick="loadPhoneDetails('${phone.category_id}')" href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"">Show Details</button>
+                                    <button onclick="loadPhoneDetails2('${phone.category_id}')" href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"">Show Details</button>
                                     
                             </div>
                         </div>
@@ -41,21 +41,21 @@ const displayPhones = (phones) => {
     toggleSpinner(false);
 }
 
-const processSearch = () => {
+const processSearch2 = () => {
     toggleSpinner(true);
-    const searchField = document.getElementById('breaking-news');
+    const searchField = document.getElementById('all-category');
     const category_id = searchField.innerText;
     loadPhones(category_id);
 }
 
 
-document.getElementById('breaking-news').addEventListener('keypress', function (e) {
+document.getElementById('all-category').addEventListener('keypress', function (e) {
     if (e.key === 'Enter') {
         processSearch(10);
     }
 })
 
-const toggleSpinner = isLoading => {
+const toggleSpinner2 = isLoading => {
     const loaderSection = document.getElementById('loader');
     if (isLoading) {
         loaderSection.classList.remove('d-none');
@@ -66,18 +66,18 @@ const toggleSpinner = isLoading => {
 }
 
 // not the best way
-document.getElementById('breaking-news').addEventListener('click', function () {
+document.getElementById('all-category').addEventListener('click', function () {
     processSearch();
 })
 
-const loadPhoneDetails = async news_id => {
+const loadPhoneDetails2 = async news_id => {
     const url = ` https://openapi.programming-hero.com/api/news/${news_id}`;
     const res = await fetch(url);
     const data = await res.json();
     displayPhoneDetails(data.data);
 }
 
-const displayPhoneDetails = phone => {
+const displayPhoneDetails2 = phone => {
     const modalTitle = document.getElementById('exampleModalLabel');
     modalTitle.innerText = phone.name;
     const phoneDetails = document.getElementById('phone-details');
